@@ -10,7 +10,6 @@ let hintExcluded = [];
 const alphabetLetter = "abcdefghijklmopqrstuvwxyz";
 const content = [
   {
-    id: 1,
     src: [
       "https://www.diagnosisdiet.com/assets/images/c/fruit-og-d176ef00.jpg",
       "https://i0.wp.com/post.healthline.com/wp-content/uploads/2021/05/apples-1296x728-header.jpg?w=1155&h=1528",
@@ -18,6 +17,33 @@ const content = [
       "https://imgk.timesnownews.com/story/Fruits_grapefruit_citric_colourful_flavonoids_kiwi_berries.jpg?tr=w-1200,h-900",
     ],
     answer: "fruits",
+  },
+  {
+    src: [
+      "https://www.helpguide.org/wp-content/uploads/young-woman-smiling-in-bed-stretching-arms-out.jpg",
+      "https://thedacare.org/wp-content/uploads/2021/07/young-boy-sleeping.jpg",
+      "https://ggsc.s3.amazonaws.com/images/uploads/Five_Tips_for_Women_Who_Have_Trouble_Sleeping.jpg",
+      "https://d.newsweek.com/en/full/1969059/sleeping-person.jpg?w=1600&h=1200&q=88&f=7908fc7766a1052c1041bee6182ae5b6",
+    ],
+    answer: "sleep",
+  },
+  {
+    src: [
+      "https://inyarwanda.com/app/webroot/img/202108/images/how-much-water-should-we-drink-8111511630039393.jpg",
+      "https://img.huffingtonpost.com/asset/5bbe509d2100002501c984b8.jpeg?cache=GjqcPjy9zE&ops=scalefit_720_noupscale",
+      "https://i.insider.com/5bfbfeb048eb1219cd3aef14?width=700",
+      "https://inyarwanda.com/app/webroot/img/202108/images/7ac4179c-7350-426b-8b68-6c01ca24029e-710971629439843.jfif",
+    ],
+    answer: "drink",
+  },
+  {
+    src: [
+      "https://static.turbosquid.com/Preview/2020/06/13__09_44_55/000tb.jpgB634DDDB-0CE6-423E-B402-90A419DD6F75Large.jpg",
+      "https://images.immediate.co.uk/production/volatile/sites/4/2021/08/GettyImages-1215288361-Hero-a892ab9.jpg?quality=90&resize=768,574",
+      "https://snaped.fns.usda.gov/sites/default/files/styles/crop_ratio_7_5/public/seasonal-produce/2018-05/watermelon.jpg?itok=6EdNOdUo",
+      "https://image.freepik.com/free-vector/gold-coin_92172-91.jpg",
+    ],
+    answer: "round",
   },
 ];
 let hint = Math.floor(content[0].answer.length / 3);
