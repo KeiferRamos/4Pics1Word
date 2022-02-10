@@ -12,6 +12,7 @@ const endGame = document.querySelector(".end-game");
 const playAgainBtn = document.getElementById("playagain-btn");
 let randomChar = [];
 let answerBoxIndex = [];
+let charArray = [];
 let hintIndex = [];
 let hintExcluded = [];
 let gameLevel = 0;
@@ -75,7 +76,7 @@ function displayAnswerBox() {
 
 function displayRandomChar() {
   for (var i = 0; i < 18; i++) {
-    randomChar.push(`<div>${alphabetLetter.charAt(random())}</div>`);
+    randomChar.push(`<div id="${i}">${alphabetLetter.charAt(random())}</div>`);
   }
   randomCharCont.innerHTML = randomChar.join("");
   let randChars = randomCharCont.querySelectorAll("div");
@@ -106,34 +107,44 @@ function checkAnswer() {
     });
     if (userAnswer == content[gameLevel].answer) {
       nextDisplay.classList.add("next");
-      console.log("correct");
     }
   }
 }
 
 function charOnClick() {
-  createIndex(answerBoxIndex);
   const randChars = randomCharCont.querySelectorAll("div");
-  Array.from(randChars).forEach((randChar) => {
+  Array.from(randChars).forEach((randChar, i) => {
     randChar.addEventListener("click", () => {
       const sortedIndex = answerBoxIndex.sort();
       const answerBox = Array.from(charContainer.children);
-      if (answerBox[sortedIndex[0]].innerHTML === "") {
-        answerBox[sortedIndex[0]].innerHTML = randChar.innerHTML;
-        sortedIndex.shift();
+      if (answerBoxIndex.length !== 0) {
+        if (answerBox[sortedIndex[0]].innerHTML === "") {
+          answerBox[sortedIndex[0]].innerHTML = randChar.innerHTML;
+          charArray[sortedIndex[0]] = i;
+          sortedIndex.shift();
+          randChar.style.display = "none";
+          console.log(charArray);
+        }
+        checkAnswer();
       }
-      checkAnswer();
     });
   });
 }
 
 function removeChar() {
   const answerBox = Array.from(charContainer.children);
+  const randChars = Array.from(randomCharCont.querySelectorAll("div"));
   answerBox.forEach((ans, i) => {
     ans.addEventListener("click", () => {
-      ans.innerHTML = "";
-      answerBoxIndex.unshift(i);
-      userAnswer = "";
+      if (ans.innerHTML) {
+        randChars[charArray[i]].style.display = "block";
+        charArray[i] = 0;
+        console.log(charArray);
+        answerBoxIndex.unshift(i);
+        ans.innerHTML = "";
+        userAnswer = "";
+        displayChar();
+      }
     });
   });
 }
@@ -171,6 +182,17 @@ function nextLevel() {
   }
 }
 
+function displayChar() {
+  const randChars = randomCharCont.querySelectorAll("div");
+  randChars.forEach((randChar, i) => {
+    if (charArray.includes(i)) {
+      randChar.style.display = "none";
+    } else {
+      randChar.style.display = "block";
+    }
+  });
+}
+
 nextBtn.addEventListener("click", () => nextLevel());
 
 refreshBtn.addEventListener("click", () => {
@@ -179,7 +201,10 @@ refreshBtn.addEventListener("click", () => {
     if (!hintIndex.includes(i)) {
       answer.innerHTML = "";
     }
+    charArray = [];
+    charArray.length = content[gameLevel].answer.length;
     answerBoxIndex = [];
+    displayChar();
     createIndex(answerBoxIndex);
     hintIndex.forEach((hint) => {
       answerBoxIndex.splice(answerBoxIndex.indexOf(hint), 1);
@@ -191,26 +216,34 @@ const answerKeyRand = (answerKey) =>
   Math.floor(Math.random() * answerKey.length);
 
 hintBtn.addEventListener("click", () => {
-  if (hint !== 0) {
+  const randChars = Array.from(randomCharCont.querySelectorAll("div"));
+  if (hint !== 0 && answerBoxIndex.length !== 0) {
     const answerBox = Array.from(charContainer.children);
     const answerKey = content[gameLevel].answer;
     let randomHint = answerKeyRand(answerKey);
     while (answerBox[randomHint].innerHTML) {
       randomHint = answerKeyRand(answerKey);
     }
-    answerBox[randomHint].innerHTML = answerKey.charAt(randomHint);
+    const ansChar = answerKey.charAt(randomHint);
+    const charIndex = randChars.find((char) => char.innerHTML == ansChar);
+    answerBox[randomHint].innerHTML = ansChar;
     answerBox[randomHint].style.background = "#245364";
     answerBox[randomHint].style.color = "#fff";
+    charArray[randomHint] = randChars.indexOf(charIndex);
     answerBoxIndex.splice(answerBoxIndex.indexOf(randomHint), 1);
     hintIndex.push(randomHint);
     hint--;
     hintCount.innerHTML = hint;
     checkAnswer();
+    displayChar();
   }
+  return;
 });
 
 const startGame = () => {
   hintCount.innerHTML = hint;
+  charArray.length = content[gameLevel].answer.length;
+  createIndex(answerBoxIndex);
   displayImages();
   displayAnswerBox();
   displayRandomChar();
