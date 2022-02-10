@@ -191,7 +191,7 @@ const answerKeyRand = (answerKey) =>
   Math.floor(Math.random() * answerKey.length);
 
 hintBtn.addEventListener("click", () => {
-  if (hint !== 0) {
+  if (hint !== 0 && answerBoxIndex.length !== 0) {
     const answerBox = Array.from(charContainer.children);
     const answerKey = content[gameLevel].answer;
     let randomHint = answerKeyRand(answerKey);
@@ -207,6 +207,7 @@ hintBtn.addEventListener("click", () => {
     hintCount.innerHTML = hint;
     checkAnswer();
   }
+  return
 });
 
 const startGame = () => {
