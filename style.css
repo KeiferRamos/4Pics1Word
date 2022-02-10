@@ -48,6 +48,34 @@ body {
   place-items: center;
 }
 
+.end-game {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: #bcd4e2;
+  z-index: 1000;
+  display: none;
+  place-items: center;
+  font-size: 30px;
+}
+
+.end-game div > button {
+  padding: 10px 20px;
+  margin-top: 40px;
+  letter-spacing: 0.15rem;
+  font-size: 11px;
+  border-radius: 5px;
+  color: #3a7e96;
+  border: none;
+  text-transform: uppercase;
+}
+
+.end {
+  display: grid;
+}
+
 #answer {
   position: relative;
 }
@@ -68,6 +96,57 @@ body {
   border: none;
   background-color: #5d929e;
   border-radius: 5px;
+  position: relative;
+}
+
+#hint-count {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  left: -5px;
+  bottom: -5px;
+  line-height: 15px;
+  font-size: 10px;
+  background: #10191d;
+  border-radius: 50%;
+  color: #deeff8;
+}
+
+.answer-container tr > td {
+  width: 30px;
+  height: 30px;
+  background: #bcd4e2;
+}
+
+.next-display {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  background: #a4d3e3;
+  z-index: 3;
+  display: none;
+}
+
+.next-display > div {
+  font-size: 40px;
+  color: #4d9bb7;
+}
+
+.next-display div > button {
+  margin-top: 40px;
+  padding: 10px 20px;
+  border: none;
+  text-transform: uppercase;
+  letter-spacing: 0.15rem;
+  color: #3a7e96;
+}
+
+.next {
+  display: grid;
 }
 
 .startgame-display {
@@ -80,6 +159,10 @@ body {
   z-index: 4;
   box-sizing: border-box;
   padding-top: 50px;
+}
+
+.start-game {
+  display: none;
 }
 
 .startgame-display > button {
@@ -96,12 +179,6 @@ body {
   width: 200px;
   height: 200px;
   object-fit: cover;
-}
-
-.answer-container tr > td {
-  width: 30px;
-  height: 30px;
-  background-color: #bcd4e2;
 }
 
 #random-char {

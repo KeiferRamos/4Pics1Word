@@ -36,12 +36,29 @@
         <h1 class="title">4 PICS 1 WORD</h1>
         <button id="start-btn">Play game</button>
       </div>
+      <div class="next-display">
+        <div>
+          <i class="fa-solid fa-thumbs-up"></i>
+          <p>Good Job</p>
+          <button id="next-btn">next</button>
+        </div>
+      </div>
+      <div class="end-game">
+        <div>
+          <p>That's all</p>
+          <p>thank you for playing</p>
+          <button id="playagain-btn">play again</button>
+        </div>
+      </div>
+      <div></div>
       <h2 class="title">4 PICS 1 WORD</h2>
       <div class="img-container"></div>
       <div id="answer">
         <table class="answer-container">
           <div class="power-ups">
-            <button id="hint-btn"><i class="fa-solid fa-lightbulb"></i></button>
+            <button id="hint-btn">
+              <i class="fa-solid fa-lightbulb"><span id="hint-count"></span></i>
+            </button>
             <button id="refresh-btn">
               <i class="fa-solid fa-rotate-right"></i>
             </button>

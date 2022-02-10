@@ -3,10 +3,19 @@ const charContainer = document.querySelector(".char-container");
 const randomCharCont = document.querySelector("#random-char");
 const hintBtn = document.getElementById("hint-btn");
 const refreshBtn = document.getElementById("refresh-btn");
-const randomChar = [];
+const startGameDisplay = document.querySelector(".startgame-display");
+const nextDisplay = document.querySelector(".next-display");
+const nextBtn = document.getElementById("next-btn");
+const startBtn = document.getElementById("start-btn");
+const hintCount = document.getElementById("hint-count");
+const endGame = document.querySelector(".end-game");
+const playAgainBtn = document.getElementById("playagain-btn");
+let randomChar = [];
 let answerBoxIndex = [];
 let hintIndex = [];
 let hintExcluded = [];
+let gameLevel = 0;
+let userAnswer = "";
 const alphabetLetter = "abcdefghijklmopqrstuvwxyz";
 const content = [
   {
@@ -46,19 +55,19 @@ const content = [
     answer: "round",
   },
 ];
-let hint = Math.floor(content[0].answer.length / 3);
 
 const random = () => Math.floor(Math.random() * alphabetLetter.length);
+let hint = Math.floor(content[gameLevel].answer.length / 3);
 
 function displayImages() {
-  const displayImages = content[0].src
+  const displayImages = content[gameLevel].src
     .map((img) => `<img src=${img} alt=""/>`)
     .join("");
   imageContainer.innerHTML = displayImages;
 }
 
 function displayAnswerBox() {
-  const answerContainer = Array.from(content[0].answer)
+  const answerContainer = Array.from(content[gameLevel].answer)
     .map(() => `<td></td>`)
     .join("");
   charContainer.innerHTML = answerContainer;
@@ -71,18 +80,34 @@ function displayRandomChar() {
   randomCharCont.innerHTML = randomChar.join("");
   let randChars = randomCharCont.querySelectorAll("div");
   let randomPosition = [];
-  while ([...new Set(randomPosition)].length !== content[0].answer.length) {
+  while (
+    [...new Set(randomPosition)].length !== content[gameLevel].answer.length
+  ) {
     randomPosition.push(Math.floor(Math.random() * 18));
   }
   const newRandSet = [...new Set(randomPosition)];
-  for (var i = 0; i < content[0].answer.length; i++) {
-    randChars[newRandSet[i]].innerHTML = content[0].answer.charAt(i);
+  for (var i = 0; i < content[gameLevel].answer.length; i++) {
+    randChars[newRandSet[i]].innerHTML = content[gameLevel].answer.charAt(i);
   }
 }
 
 function createIndex(array) {
-  for (var i = 0; i < content[0].answer.length; i++) {
+  for (var i = 0; i < content[gameLevel].answer.length; i++) {
     array.push(i);
+  }
+}
+
+function checkAnswer() {
+  const answerBox = Array.from(charContainer.children);
+  const allAnswered = answerBox.every((ans) => ans.innerHTML !== "");
+  if (allAnswered) {
+    answerBox.forEach((ans) => {
+      userAnswer += ans.innerHTML;
+    });
+    if (userAnswer == content[gameLevel].answer) {
+      nextDisplay.classList.add("next");
+      console.log("correct");
+    }
   }
 }
 
@@ -97,6 +122,7 @@ function charOnClick() {
         answerBox[sortedIndex[0]].innerHTML = randChar.innerHTML;
         sortedIndex.shift();
       }
+      checkAnswer();
     });
   });
 }
@@ -107,9 +133,45 @@ function removeChar() {
     ans.addEventListener("click", () => {
       ans.innerHTML = "";
       answerBoxIndex.unshift(i);
+      userAnswer = "";
     });
   });
 }
+
+startBtn.addEventListener("click", () => {
+  startGameDisplay.classList.add("start-game");
+});
+
+playAgainBtn.addEventListener("click", () => {
+  endGame.classList.remove("end");
+  nextDisplay.classList.remove("next");
+  gameLevel = 0;
+  refreshGame();
+  startGame();
+});
+
+function refreshGame() {
+  randomChar = [];
+  answerBoxIndex = [];
+  hintIndex = [];
+  hintExcluded = [];
+  userAnswer = "";
+  hint = Math.floor(content[gameLevel].answer.length / 3);
+  hintCount.innerHTML = hint;
+  nextDisplay.classList.remove("next");
+}
+
+function nextLevel() {
+  if (gameLevel < content.length - 1) {
+    gameLevel++;
+    refreshGame();
+    startGame();
+  } else {
+    endGame.classList.add("end");
+  }
+}
+
+nextBtn.addEventListener("click", () => nextLevel());
 
 refreshBtn.addEventListener("click", () => {
   const answerBox = Array.from(charContainer.children);
@@ -131,20 +193,24 @@ const answerKeyRand = (answerKey) =>
 hintBtn.addEventListener("click", () => {
   if (hint !== 0) {
     const answerBox = Array.from(charContainer.children);
-    const answerKey = content[0].answer;
+    const answerKey = content[gameLevel].answer;
     let randomHint = answerKeyRand(answerKey);
     while (answerBox[randomHint].innerHTML) {
       randomHint = answerKeyRand(answerKey);
     }
     answerBox[randomHint].innerHTML = answerKey.charAt(randomHint);
-
+    answerBox[randomHint].style.background = "#245364";
+    answerBox[randomHint].style.color = "#fff";
     answerBoxIndex.splice(answerBoxIndex.indexOf(randomHint), 1);
     hintIndex.push(randomHint);
     hint--;
+    hintCount.innerHTML = hint;
+    checkAnswer();
   }
 });
 
 const startGame = () => {
+  hintCount.innerHTML = hint;
   displayImages();
   displayAnswerBox();
   displayRandomChar();
