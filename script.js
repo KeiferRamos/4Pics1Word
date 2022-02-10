@@ -201,8 +201,8 @@ refreshBtn.addEventListener("click", () => {
     if (!hintIndex.includes(i)) {
       answer.innerHTML = "";
     }
-    charArray = [];
-    charArray.length = content[gameLevel].answer.length;
+    // charArray = [];
+    // charArray.length = content[gameLevel].answer.length;
     answerBoxIndex = [];
     displayChar();
     createIndex(answerBoxIndex);
