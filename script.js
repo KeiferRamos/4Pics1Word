@@ -36,15 +36,15 @@ const content = [
     ],
     answer: "sleep",
   },
-  // {
-  //   src: [
-  //     "https://inyarwanda.com/app/webroot/img/202108/images/how-much-water-should-we-drink-8111511630039393.jpg",
-  //     "https://img.huffingtonpost.com/asset/5bbe509d2100002501c984b8.jpeg?cache=GjqcPjy9zE&ops=scalefit_720_noupscale",
-  //     "https://i.insider.com/5bfbfeb048eb1219cd3aef14?width=700",
-  //     "https://inyarwanda.com/app/webroot/img/202108/images/7ac4179c-7350-426b-8b68-6c01ca24029e-710971629439843.jfif",
-  //   ],
-  //   answer: "drink",
-  // },
+  {
+    src: [
+      "https://inyarwanda.com/app/webroot/img/202108/images/how-much-water-should-we-drink-8111511630039393.jpg",
+      "https://img.huffingtonpost.com/asset/5bbe509d2100002501c984b8.jpeg?cache=GjqcPjy9zE&ops=scalefit_720_noupscale",
+      "https://i.insider.com/5bfbfeb048eb1219cd3aef14?width=700",
+      "https://inyarwanda.com/app/webroot/img/202108/images/7ac4179c-7350-426b-8b68-6c01ca24029e-710971629439843.jfif",
+    ],
+    answer: "drink",
+  },
   {
     src: [
       "https://static.turbosquid.com/Preview/2020/06/13__09_44_55/000tb.jpgB634DDDB-0CE6-423E-B402-90A419DD6F75Large.jpg",
@@ -53,6 +53,15 @@ const content = [
       "https://image.freepik.com/free-vector/gold-coin_92172-91.jpg",
     ],
     answer: "round",
+  },
+  {
+    src: [
+      "https://i0.wp.com/post.healthline.com/wp-content/uploads/2019/12/pull-up-pullup-gym-1296x728-header-1296x728.jpg?w=1155&h=1528",
+      "http://www.todayifoundout.com/wp-content/uploads/2014/05/pulling-your-leg.jpg",
+      "https://cdn2.hubspot.net/hub/448936/file-2180944008-jpg/blog-files/push-and-pull_istock_000007808735xsmall.jpg",
+      "https://dictionaryblog.cambridge.org/wp-content/uploads/2019/09/pull-leg-e1568812703797.jpg",
+    ],
+    answer: "pull",
   },
 ];
 
