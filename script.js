@@ -14,7 +14,6 @@ let randomChar = [];
 let answerBoxIndex = [];
 let charArray = [];
 let hintIndex = [];
-let hintExcluded = [];
 let gameLevel = 0;
 let userAnswer = "";
 const alphabetLetter = "abcdefghijklmopqrstuvwxyz";
@@ -37,15 +36,15 @@ const content = [
     ],
     answer: "sleep",
   },
-  {
-    src: [
-      "https://inyarwanda.com/app/webroot/img/202108/images/how-much-water-should-we-drink-8111511630039393.jpg",
-      "https://img.huffingtonpost.com/asset/5bbe509d2100002501c984b8.jpeg?cache=GjqcPjy9zE&ops=scalefit_720_noupscale",
-      "https://i.insider.com/5bfbfeb048eb1219cd3aef14?width=700",
-      "https://inyarwanda.com/app/webroot/img/202108/images/7ac4179c-7350-426b-8b68-6c01ca24029e-710971629439843.jfif",
-    ],
-    answer: "drink",
-  },
+  // {
+  //   src: [
+  //     "https://inyarwanda.com/app/webroot/img/202108/images/how-much-water-should-we-drink-8111511630039393.jpg",
+  //     "https://img.huffingtonpost.com/asset/5bbe509d2100002501c984b8.jpeg?cache=GjqcPjy9zE&ops=scalefit_720_noupscale",
+  //     "https://i.insider.com/5bfbfeb048eb1219cd3aef14?width=700",
+  //     "https://inyarwanda.com/app/webroot/img/202108/images/7ac4179c-7350-426b-8b68-6c01ca24029e-710971629439843.jfif",
+  //   ],
+  //   answer: "drink",
+  // },
   {
     src: [
       "https://static.turbosquid.com/Preview/2020/06/13__09_44_55/000tb.jpgB634DDDB-0CE6-423E-B402-90A419DD6F75Large.jpg",
@@ -115,6 +114,7 @@ function charOnClick() {
   const randChars = randomCharCont.querySelectorAll("div");
   Array.from(randChars).forEach((randChar, i) => {
     randChar.addEventListener("click", () => {
+      refreshArray();
       const sortedIndex = answerBoxIndex.sort();
       const answerBox = Array.from(charContainer.children);
       if (answerBoxIndex.length !== 0) {
@@ -123,23 +123,20 @@ function charOnClick() {
           charArray[sortedIndex[0]] = i;
           sortedIndex.shift();
           randChar.style.display = "none";
-          console.log(charArray);
         }
-        checkAnswer();
       }
+      userAnswer = "";
+      checkAnswer();
     });
   });
 }
 
 function removeChar() {
   const answerBox = Array.from(charContainer.children);
-  const randChars = Array.from(randomCharCont.querySelectorAll("div"));
   answerBox.forEach((ans, i) => {
     ans.addEventListener("click", () => {
       if (ans.innerHTML) {
-        randChars[charArray[i]].style.display = "block";
-        charArray[i] = 0;
-        console.log(charArray);
+        charArray[i] = undefined;
         answerBoxIndex.unshift(i);
         ans.innerHTML = "";
         userAnswer = "";
@@ -164,8 +161,8 @@ playAgainBtn.addEventListener("click", () => {
 function refreshGame() {
   randomChar = [];
   answerBoxIndex = [];
+  charArray = [];
   hintIndex = [];
-  hintExcluded = [];
   userAnswer = "";
   hint = Math.floor(content[gameLevel].answer.length / 3);
   hintCount.innerHTML = hint;
@@ -197,14 +194,15 @@ nextBtn.addEventListener("click", () => nextLevel());
 
 refreshBtn.addEventListener("click", () => {
   const answerBox = Array.from(charContainer.children);
+  charArray = charArray.map((char, i) => {
+    return hintIndex.includes(i) ? char : undefined;
+  });
+  displayChar();
   answerBox.forEach((answer, i) => {
     if (!hintIndex.includes(i)) {
       answer.innerHTML = "";
     }
-    // charArray = [];
-    // charArray.length = content[gameLevel].answer.length;
     answerBoxIndex = [];
-    displayChar();
     createIndex(answerBoxIndex);
     hintIndex.forEach((hint) => {
       answerBoxIndex.splice(answerBoxIndex.indexOf(hint), 1);
@@ -212,32 +210,61 @@ refreshBtn.addEventListener("click", () => {
   });
 });
 
+function refreshArray() {
+  answerBoxIndex = [];
+  const answerBox = Array.from(charContainer.children);
+  answerBox.forEach((char, i) => {
+    if (!char.innerHTML) {
+      answerBoxIndex.push(i);
+    } else {
+      return;
+    }
+  });
+}
+
 const answerKeyRand = (answerKey) =>
   Math.floor(Math.random() * answerKey.length);
 
 hintBtn.addEventListener("click", () => {
   const randChars = Array.from(randomCharCont.querySelectorAll("div"));
-  if (hint !== 0 && answerBoxIndex.length !== 0) {
+  if (hint !== 0) {
     const answerBox = Array.from(charContainer.children);
     const answerKey = content[gameLevel].answer;
     let randomHint = answerKeyRand(answerKey);
-    while (answerBox[randomHint].innerHTML) {
-      randomHint = answerKeyRand(answerKey);
+    if (answerBoxIndex.length !== 0 || hintIndex.includes(randomHint)) {
+      while (answerBox[randomHint].innerHTML) {
+        randomHint = answerKeyRand(answerKey);
+      }
+    } else if (
+      answerBox[randomHint].innerHTML == answerKey.charAt(randomHint)
+    ) {
+      for (var i = 0; i < answerBox.length; i++) {
+        if (answerBox[i].innerHTML !== answerKey.charAt(i)) {
+          randomHint = i;
+          break;
+        }
+      }
     }
     const ansChar = answerKey.charAt(randomHint);
+    for (var i = 0; i < answerBox.length; i++) {
+      if (answerBox[i].innerHTML == ansChar) {
+        answerBox[i].innerHTML = "";
+        break;
+      }
+    }
     const charIndex = randChars.find((char) => char.innerHTML == ansChar);
     answerBox[randomHint].innerHTML = ansChar;
     answerBox[randomHint].style.background = "#245364";
     answerBox[randomHint].style.color = "#fff";
     charArray[randomHint] = randChars.indexOf(charIndex);
-    answerBoxIndex.splice(answerBoxIndex.indexOf(randomHint), 1);
     hintIndex.push(randomHint);
     hint--;
+    answerBoxIndex.splice(answerBoxIndex.indexOf(randomHint), 1);
     hintCount.innerHTML = hint;
-    checkAnswer();
     displayChar();
   }
-  return;
+  userAnswer = "";
+  checkAnswer();
 });
 
 const startGame = () => {
